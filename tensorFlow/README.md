@@ -12,9 +12,12 @@ Machine Learning
 
 DATA + ANSWERS = RULES
 
-### The ‘Hello World’ of neural networks
+### Week1: The ‘Hello World’ of neural networks
 Notes:
 Loss Function : To measure the how good or bad the quess is ?
 Optimizer : How good/bad the guess is done ?
 Code : hello_world_of_nn.py
+
+### Week2: An Introduction to computer vision
+
 
