@@ -1,6 +1,7 @@
 ### Name of the Course : Introduction to TensorFlow for Artificial Intelligence, Machine Learning, and Deep Learning
 ### BY : Laurence Moroney
 ### Platform : Courseera
+### Link : https://www.coursera.org/learn/introduction-tensorflow/home/welcome
 
 # Instructions and Notes
 
