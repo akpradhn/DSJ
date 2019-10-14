@@ -21,4 +21,17 @@ Code : hello_world_of_nn.py
 
 ### Week2: An Introduction to computer vision
 
+MNIST Classification Data set
+
+Code : 
+	1) W2_Computer_Vision.py
+	2) W2_Digit_Recognization.py
+
+### Week2: Enhancing Vision with Convolutional Neural Networks
+
+MNIST Fashion Classifications
+Code :
+	1) W3_CNN_Exercise.py
+	
+
 
