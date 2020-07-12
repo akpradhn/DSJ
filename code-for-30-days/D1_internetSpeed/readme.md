@@ -8,6 +8,16 @@ Overviews
 - Taking reference from https://github.com/roniemartinez/real-time-charts-with-flask/tree/0da0eedc3791f1e14a380e2d238c6fe0f0b5dc73 visualizing it over a flask api.
 - Build a Docker image
 
+Steps to run the app
+
+* `git clone https://github.com/akpradhn/DSJ.git`
+
+* `cd DSJ/code-for-30-days/D1_internetSpeed`
+
+* `docker-compose build`
+
+* `docker-compose up -d`
+
 Link to webapps
 http://127.0.0.1:8000/
 
