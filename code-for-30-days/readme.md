@@ -8,3 +8,4 @@ Start Date : 14th July 2020
 * Day 3 : Coding Puzzles using python
 * Day 4 : Understanding Travelling Salesman problem
 * Day 5 : Host Flask API in Heroku
+* Day 6 : Scrapping Data from R
