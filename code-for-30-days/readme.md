@@ -9,3 +9,4 @@ Start Date : 14th July 2020
 * Day 4 : Understanding Travelling Salesman problem
 * Day 5 : Host Flask API in Heroku
 * Day 6 : Scrapping Data from R
+* Day 7 : Exploring Apache Spark Using python pyspark
