@@ -10,3 +10,4 @@ Start Date : 12th July 2020
 * Day 5 : Host Flask API in Heroku
 * Day 6 : Scrapping Data from R
 * Day 7 : Exploring Apache Spark Using python pyspark
+* Day 8 : Exploring Apache spark using python (Day2)
