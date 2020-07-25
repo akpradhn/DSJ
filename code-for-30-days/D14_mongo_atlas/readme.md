@@ -1,13 +1,14 @@
 ## Day 14 : Exploring Mongo Atlas 
 
+![MongoChart](https://github.com/akpradhn/DSJ/blob/master/code-for-30-days/D14_mongo_atlas/mongo_chart.png)
+
 Objective : We will create a script to record network speed and upload it to a server (MongoDb) and visualize the data using mongo chart.
-
-
 
 
 - Create A Cluster
 - Create A User
 - Allow Network Access
+
 
 
 
