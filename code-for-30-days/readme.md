@@ -15,3 +15,4 @@ Start Date : 12th July 2020
 * Day 10 : Unit Testing in python
 * Day 11 : Exploring Apache spark using python (Day3)
 * Day 12 : Exploring Apache spark using python (Day4)
+* Day 13 : Exploring MLOps Tutorial 
