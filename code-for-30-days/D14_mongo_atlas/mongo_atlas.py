@@ -45,7 +45,7 @@ def get_new_speeds():
 while True:
     try:
         internet_info = get_new_speeds()
-        time.sleep(1)
+        time.sleep(300)
         print(internet_info)
         speed_collection.insert_one(internet_info)
 
