@@ -26,3 +26,4 @@ Week 2
 Week 3
 ---
 * Day 15 : Introduction to Machine Learning
+* Day 16 : Build a CI/CD Pipeline from forecasting model to deployment
