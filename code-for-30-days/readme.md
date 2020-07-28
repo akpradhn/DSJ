@@ -27,3 +27,4 @@ Week 3
 ---
 * Day 15 : Introduction to Machine Learning
 * Day 16 : Build a CI/CD Pipeline 
+* Day 17 : Build a Scrapper 
