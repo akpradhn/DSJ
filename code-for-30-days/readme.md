@@ -28,3 +28,5 @@ Week 3
 * Day 15 : Introduction to Machine Learning
 * Day 16 : Build a CI/CD Pipeline 
 * Day 17 : Build a Scrapper 
+* Day 18 : Time Series Analysis 
+* Day 19 : Time Series Analysis part 2
