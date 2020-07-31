@@ -30,3 +30,4 @@ Week 3
 * Day 17 : Build a Scrapper 
 * Day 18 : Time Series Analysis 
 * Day 19 : Time Series Analysis part 2
+* Day 20 : Time Series Analysis part 3
