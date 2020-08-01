@@ -31,3 +31,4 @@ Week 3
 * Day 18 : Time Series Analysis 
 * Day 19 : Time Series Analysis part 2
 * Day 20 : Time Series Analysis part 3
+* Day 21 : Deploying ML Models
