@@ -32,3 +32,7 @@ Week 3
 * Day 19 : Time Series Analysis part 2
 * Day 20 : Time Series Analysis part 3
 * Day 21 : Deploying ML Models
+
+Week 4
+---
+* Day 22 : Automating a stock price prediction 
