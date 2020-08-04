@@ -36,3 +36,5 @@ Week 3
 Week 4
 ---
 * Day 22 : Automating a stock price prediction 
+* Day 23 : Automating a stock price prediction (Day2)
+* Day 24 : Time Series Clustering : Find Similar Stocks
