@@ -1,6 +1,5 @@
-from config import *
+from config import MONGO_URL
 from pymongo import MongoClient
-from pymongo.uri_parser import parse_uri
 import speedtest as st
 from datetime import datetime
 import ssl
