@@ -1,7 +1,7 @@
 import Foundation
 import CoreData
 
-final class PersistenceController: ObservableObject {
+final class PersistenceController {
     static let shared = PersistenceController()
 
     let container: NSPersistentContainer
@@ -213,6 +213,30 @@ final class PersistenceController: ObservableObject {
         d_createdAt.attributeType = .dateAttributeType
         d_createdAt.isOptional = false
 
+        // New fields for dose details
+        let d_weightAtDose = NSAttributeDescription()
+        d_weightAtDose.name = "weightAtDose"
+        d_weightAtDose.attributeType = .floatAttributeType
+        d_weightAtDose.isOptional = false
+        d_weightAtDose.defaultValue = 0.0
+
+        let d_heightAtDose = NSAttributeDescription()
+        d_heightAtDose.name = "heightAtDose"
+        d_heightAtDose.attributeType = .floatAttributeType
+        d_heightAtDose.isOptional = false
+        d_heightAtDose.defaultValue = 0.0
+
+        let d_headCircumferenceAtDose = NSAttributeDescription()
+        d_headCircumferenceAtDose.name = "headCircumferenceAtDose"
+        d_headCircumferenceAtDose.attributeType = .floatAttributeType
+        d_headCircumferenceAtDose.isOptional = false
+        d_headCircumferenceAtDose.defaultValue = 0.0
+
+        let d_vaccineBrand = NSAttributeDescription()
+        d_vaccineBrand.name = "vaccineBrand"
+        d_vaccineBrand.attributeType = .stringAttributeType
+        d_vaccineBrand.isOptional = true
+
         // Relationships
         let r_dose_patient = NSRelationshipDescription()
         r_dose_patient.name = "patient"
@@ -225,7 +249,7 @@ final class PersistenceController: ObservableObject {
         r_patient_doses.name = "doses"
         r_patient_doses.destinationEntity = dose
         r_patient_doses.minCount = 0
-        r_patient_doses.maxCount = 0 // to-many
+        r_patient_doses.maxCount = 0
         r_patient_doses.deleteRule = .cascadeDeleteRule
 
         r_dose_patient.inverseRelationship = r_patient_doses
@@ -242,7 +266,7 @@ final class PersistenceController: ObservableObject {
         r_vaccine_doses.name = "doses"
         r_vaccine_doses.destinationEntity = dose
         r_vaccine_doses.minCount = 0
-        r_vaccine_doses.maxCount = 0 // to-many
+        r_vaccine_doses.maxCount = 0
         r_vaccine_doses.deleteRule = .cascadeDeleteRule
 
         r_dose_vaccine.inverseRelationship = r_vaccine_doses
@@ -258,10 +282,10 @@ final class PersistenceController: ObservableObject {
 
         dose.properties = [
             d_id, d_scheduled, d_due, d_given, d_batch, d_facility, d_admin, d_notes, d_createdAt,
+            d_weightAtDose, d_heightAtDose, d_headCircumferenceAtDose, d_vaccineBrand,
             r_dose_patient, r_dose_vaccine
         ]
 
-        // Uniqueness constraints by id
         patient.uniquenessConstraints = [["id"]]
         vaccine.uniquenessConstraints = [["id"]]
         dose.uniquenessConstraints = [["id"]]

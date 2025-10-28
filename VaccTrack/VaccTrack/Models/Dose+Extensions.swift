@@ -9,6 +9,9 @@ public class Dose: NSManagedObject {
     }
 }
 
+// Allow SwiftUI to identify Dose by its 'id'
+extension Dose: Identifiable {}
+
 extension Dose {
     @NSManaged public var id: UUID
     @NSManaged public var scheduledDate: Date
@@ -19,6 +22,12 @@ extension Dose {
     @NSManaged public var administeredBy: String?
     @NSManaged public var notes: String?
     @NSManaged public var createdAt: Date
+    
+    // New fields for dose details
+    @NSManaged public var weightAtDose: Float
+    @NSManaged public var heightAtDose: Float
+    @NSManaged public var headCircumferenceAtDose: Float
+    @NSManaged public var vaccineBrand: String?
 
     @NSManaged public var patient: Patient?
     @NSManaged public var vaccine: Vaccine?
@@ -29,10 +38,10 @@ extension Dose {
         }
         let now = Date()
         if scheduledDate > now {
-            let days = Calendar.current.dateComponents([.day], from: now.startOfDay, to: scheduledDate.startOfDay).day ?? 0
+            let days = Calendar.current.dateComponents([.day], from: Calendar.current.startOfDay(for: now), to: Calendar.current.startOfDay(for: scheduledDate)).day ?? 0
             return .upcoming(max(days, 0))
         } else {
-            let days = Calendar.current.dateComponents([.day], from: scheduledDate.startOfDay, to: now.startOfDay).day ?? 0
+            let days = Calendar.current.dateComponents([.day], from: Calendar.current.startOfDay(for: scheduledDate), to: Calendar.current.startOfDay(for: now)).day ?? 0
             if days > 0 { return .overdue(days) }
             return .notGiven
         }
@@ -62,10 +71,6 @@ public enum DoseStatus: Equatable {
         case .notGiven: return "circle"
         }
     }
-}
-
-extension Date {
-    var startOfDay: Date { Calendar.current.startOfDay(for: self) }
 }
 
 

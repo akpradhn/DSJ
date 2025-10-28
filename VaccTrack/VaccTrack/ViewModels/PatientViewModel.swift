@@ -1,5 +1,6 @@
 import Foundation
 import CoreData
+import Combine
 
 final class PatientViewModel: ObservableObject {
     @Published var firstName: String = ""
@@ -40,18 +41,12 @@ final class PatientViewModel: ObservableObject {
         }
     }
 
-    var isValid: Bool {
-        !firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        && dob <= Date()
-    }
+    var isValid: Bool { !firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && dob <= Date() }
 
     @discardableResult
     func saveAndGenerateDosesIfNeeded(seedVaccines vaccines: [Vaccine]? = nil) throws -> Patient {
         let p: Patient = patient ?? Patient(context: context)
-        if patient == nil {
-            p.id = UUID()
-            p.createdAt = Date()
-        }
+        if patient == nil { p.id = UUID(); p.createdAt = Date() }
         p.firstName = firstName.trimmingCharacters(in: .whitespacesAndNewlines)
         p.lastName = lastName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : lastName
         p.motherName = motherName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : motherName
@@ -66,17 +61,13 @@ final class PatientViewModel: ObservableObject {
         p.contactNumber = contactNumber.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : contactNumber
         p.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : notes
 
-        // Generate doses only when creating a new patient without doses
         if (p.doses?.isEmpty ?? true) {
             let vaccinesToUse: [Vaccine]
-            if let vaccines = vaccines {
-                vaccinesToUse = vaccines
-            } else {
+            if let vaccines = vaccines { vaccinesToUse = vaccines } else {
                 let req: NSFetchRequest<Vaccine> = Vaccine.fetchRequest()
                 req.sortDescriptors = [NSSortDescriptor(key: "sequence", ascending: true)]
                 vaccinesToUse = (try? context.fetch(req)) ?? []
             }
-
             for v in vaccinesToUse.sorted(by: { $0.sequence < $1.sequence }) {
                 let dose = Dose(context: context)
                 dose.id = UUID()
@@ -94,13 +85,26 @@ final class PatientViewModel: ObservableObject {
         return p
     }
 
-    var upcomingDoses: [Dose] {
-        guard let p = patient else { return [] }
-        return p.upcomingDoses
+    var upcomingDoses: [Dose] { guard let p = patient else { return [] }; return p.upcomingDoses }
+    var nextDueDate: Date? { patient?.nextDueDate }
+
+    // MARK: - Dose Editing API
+    func addDose(vaccine: Vaccine, scheduledOn: Date?) throws {
+        guard let p = patient else { return }
+        let dose = Dose(context: context)
+        dose.id = UUID()
+        dose.createdAt = Date()
+        let date = scheduledOn ?? DateHelpers.scheduledDate(dob: p.dob, weeks: Int(vaccine.recommendedAgeInWeeks))
+        dose.scheduledDate = date
+        dose.dueDate = date
+        dose.patient = p
+        dose.vaccine = vaccine
+        try context.save()
     }
 
-    var nextDueDate: Date? {
-        patient?.nextDueDate
+    func removeDose(_ dose: Dose) throws {
+        context.delete(dose)
+        try context.save()
     }
 }
 

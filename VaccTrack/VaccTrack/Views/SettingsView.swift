@@ -1,65 +1,69 @@
 import SwiftUI
-import UniformTypeIdentifiers
+import CoreData
+import UserNotifications
+import UIKit
 
 struct SettingsView: View {
     @Environment(\.managedObjectContext) private var context
     @State private var notificationsEnabled = false
-    @State private var showingImporter = false
-    @State private var exportURL: URL?
+    @State private var showShare = false
+    @State private var exportData: Data? = nil
 
     var body: some View {
         Form {
+            Section(header: Text("Reports")) {
+                Button("Export Vaccination Report (PDF)") { exportPDF() }
+                    .accessibilityLabel(Text("Export report"))
+            }
             Section(header: Text("Notifications")) {
                 Toggle("Enable reminders", isOn: $notificationsEnabled)
-                    .onChange(of: notificationsEnabled) { newValue in
-                        if newValue {
-                            NotificationHelper.requestPermission()
-                        }
+                    .onChange(of: notificationsEnabled) { _, newValue in
+                        if newValue { NotificationHelper.requestPermission() }
                     }
-                Button("Schedule sample reminder in 10s") {
-                    NotificationHelper.scheduleSample()
-                }
+                Button("Schedule sample reminder in 10s") { NotificationHelper.scheduleSample() }
             }
-            Section(header: Text("Data")) {
-                Button("Export All (JSON)") { exportAll() }
-                if let url = exportURL {
-                    ShareLink(item: url) {
-                        Label("Share Export", systemImage: "square.and.arrow.up")
-                    }
-                }
-                Button("Import JSON") { showingImporter = true }
-            }
-            Section(header: Text("Backup / Restore")) {
-                Text("Use Export to save to Files, and Import to restore.")
+            Section(header: Text("Privacy & About")) {
+                Text("VaccTrack stores your data securely on-device using Core Data. No cloud uploads.")
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }
-            Section(header: Text("About")) {
-                Text("VaccTrack helps track vaccination schedules for babies/patients. Data is stored locally on your device.")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
+            Section {
+                Button("Sign Out") { AuthManager.shared.signOut() }
+                    .foregroundColor(.red)
+            }
+        }
+        .sheet(isPresented: Binding(get: { exportData != nil }, set: { if !$0 { exportData = nil } })) {
+            if let data = exportData {
+                ShareSheet(activityItems: [TempFile.write(data: data, ext: "pdf").url])
             }
         }
         .navigationTitle(Text("Settings"))
-        .fileImporter(isPresented: $showingImporter, allowedContentTypes: [.json]) { result in
-            switch result {
-            case .success(let url):
-                do {
-                    try ExportImportService.importJSON(from: url, context: context)
-                } catch {
-                }
-            case .failure:
-                break
-            }
-        }
     }
 
-    private func exportAll() {
-        do {
-            let data = try ExportImportService.exportAllPatientsJSON(context: context)
-            exportURL = data.tempFileURL(filename: "VaccTrack-Backup.json")
-        } catch {
+    private func exportPDF() {
+        // Export for the first patient for now (can be extended to picker later)
+        let request: NSFetchRequest<Patient> = Patient.fetchRequest()
+        request.fetchLimit = 1
+        if let patient = try? context.fetch(request).first {
+            exportData = PDFGenerator.generateCardLikePDF(patient: patient)
         }
+    }
+}
+
+// Simple UIActivityViewController wrapper
+struct ShareSheet: UIViewControllerRepresentable {
+    var activityItems: [Any]
+    func makeUIViewController(context: Context) -> UIActivityViewController { UIActivityViewController(activityItems: activityItems, applicationActivities: nil) }
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
+
+// Temporary file to share Data easily
+enum TempFile {
+    struct Handle { let url: URL }
+    static func write(data: Data, ext: String) -> Handle {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension(ext)
+        try? data.write(to: url)
+        return Handle(url: url)
     }
 }
 

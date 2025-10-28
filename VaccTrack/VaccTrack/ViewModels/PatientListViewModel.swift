@@ -8,6 +8,7 @@ final class PatientListViewModel: ObservableObject {
 
     private var cancellables = Set<AnyCancellable>()
     private let context: NSManagedObjectContext
+    private var notifObserver: NSObjectProtocol?
 
     init(context: NSManagedObjectContext) {
         self.context = context
@@ -19,7 +20,16 @@ final class PatientListViewModel: ObservableObject {
             }
             .store(in: &cancellables)
 
+        // Observe context changes to refresh list after edits anywhere
+        notifObserver = NotificationCenter.default.addObserver(forName: .NSManagedObjectContextObjectsDidChange, object: context, queue: .main) { [weak self] _ in
+            self?.fetch()
+        }
+
         fetch()
+    }
+
+    deinit {
+        if let obs = notifObserver { NotificationCenter.default.removeObserver(obs) }
     }
 
     func fetch() {

@@ -1,3 +1,4 @@
+#if canImport(XCTest)
 import XCTest
 
 final class VaccTrackUITests: XCTestCase {
@@ -24,3 +25,4 @@ final class VaccTrackUITests: XCTestCase {
         }
     }
 }
+#endif

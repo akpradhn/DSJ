@@ -1,6 +1,9 @@
+#if canImport(XCTest)
 import XCTest
-import CoreData
+#if canImport(VaccTrack)
 @testable import VaccTrack
+#endif
+import CoreData
 
 final class SchedulingTests: XCTestCase {
     func testScheduledDatesWeeks() {
@@ -92,3 +95,4 @@ final class ImportExportTests: XCTestCase {
         XCTAssertEqual(imported.first?.sortedDoses.count, 1)
     }
 }
+#endif

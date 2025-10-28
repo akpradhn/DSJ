@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		96D70ED22EB0AD6400EEB33A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 96D70E792EB0A91800EEB33A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 96D70E802EB0A91800EEB33A;
+			remoteInfo = vaccTrack;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		96D70E812EB0A91800EEB33A /* vaccTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vaccTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		96D70ECE2EB0AD6400EEB33A /* vaccTrackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vaccTrackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -20,6 +31,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		96D70E7E2EB0A91800EEB33A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96D70ECB2EB0AD6400EEB33A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -41,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				96D70E812EB0A91800EEB33A /* vaccTrack.app */,
+				96D70ECE2EB0AD6400EEB33A /* vaccTrackTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +89,26 @@
 			productReference = 96D70E812EB0A91800EEB33A /* vaccTrack.app */;
 			productType = "com.apple.product-type.application";
 		};
+		96D70ECD2EB0AD6400EEB33A /* vaccTrackTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 96D70ED42EB0AD6400EEB33A /* Build configuration list for PBXNativeTarget "vaccTrackTests" */;
+			buildPhases = (
+				96D70ECA2EB0AD6400EEB33A /* Sources */,
+				96D70ECB2EB0AD6400EEB33A /* Frameworks */,
+				96D70ECC2EB0AD6400EEB33A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				96D70ED32EB0AD6400EEB33A /* PBXTargetDependency */,
+			);
+			name = vaccTrackTests;
+			packageProductDependencies = (
+			);
+			productName = vaccTrackTests;
+			productReference = 96D70ECE2EB0AD6400EEB33A /* vaccTrackTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -82,6 +121,10 @@
 				TargetAttributes = {
 					96D70E802EB0A91800EEB33A = {
 						CreatedOnToolsVersion = 26.0.1;
+					};
+					96D70ECD2EB0AD6400EEB33A = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 96D70E802EB0A91800EEB33A;
 					};
 				};
 			};
@@ -100,12 +143,20 @@
 			projectRoot = "";
 			targets = (
 				96D70E802EB0A91800EEB33A /* vaccTrack */,
+				96D70ECD2EB0AD6400EEB33A /* vaccTrackTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		96D70E7F2EB0A91800EEB33A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96D70ECC2EB0AD6400EEB33A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +173,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		96D70ECA2EB0AD6400EEB33A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		96D70ED32EB0AD6400EEB33A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 96D70E802EB0A91800EEB33A /* vaccTrack */;
+			targetProxy = 96D70ED22EB0AD6400EEB33A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		96D70E8A2EB0A91800EEB33A /* Debug */ = {
@@ -306,6 +372,46 @@
 			};
 			name = Release;
 		};
+		96D70ED52EB0AD6400EEB33A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = driftertech.vaccTrackTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/vaccTrack.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/vaccTrack";
+			};
+			name = Debug;
+		};
+		96D70ED62EB0AD6400EEB33A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = driftertech.vaccTrackTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/vaccTrack.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/vaccTrack";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -323,6 +429,15 @@
 			buildConfigurations = (
 				96D70E8D2EB0A91800EEB33A /* Debug */,
 				96D70E8E2EB0A91800EEB33A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		96D70ED42EB0AD6400EEB33A /* Build configuration list for PBXNativeTarget "vaccTrackTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				96D70ED52EB0AD6400EEB33A /* Debug */,
+				96D70ED62EB0AD6400EEB33A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
