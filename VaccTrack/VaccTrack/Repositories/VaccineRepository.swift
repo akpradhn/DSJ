@@ -32,67 +32,89 @@ enum VaccineRepository {
         func y(_ years: Int) -> Int { m(years * 12) }
 
         return [
-            // Birth and infancy
-            SeedVaccine(id: UUID(uuidString: "00000000-0000-0000-0000-000000000001"), name: "BCG", recommendedAgeInWeeks: 0, sequence: 0, notes: "Birth"),
-            SeedVaccine(id: UUID(uuidString: "00000000-0000-0000-0000-000000000002"), name: "OPV-0", recommendedAgeInWeeks: 0, sequence: 1, notes: "Birth"),
-            SeedVaccine(id: UUID(uuidString: "00000000-0000-0000-0000-000000000003"), name: "HepB-0", recommendedAgeInWeeks: 0, sequence: 2, notes: "Birth"),
-            SeedVaccine(id: nil, name: "DTP-1", recommendedAgeInWeeks: 6, sequence: 3, notes: nil),
-            SeedVaccine(id: nil, name: "IPV-1", recommendedAgeInWeeks: 6, sequence: 4, notes: nil),
-            SeedVaccine(id: nil, name: "Hib-1", recommendedAgeInWeeks: 6, sequence: 5, notes: nil),
-            SeedVaccine(id: nil, name: "Rotavirus-1", recommendedAgeInWeeks: 6, sequence: 6, notes: nil),
-            SeedVaccine(id: nil, name: "PCV-1", recommendedAgeInWeeks: 6, sequence: 7, notes: nil),
-            SeedVaccine(id: nil, name: "DTP-2", recommendedAgeInWeeks: 10, sequence: 8, notes: nil),
-            SeedVaccine(id: nil, name: "IPV-2", recommendedAgeInWeeks: 10, sequence: 9, notes: nil),
-            SeedVaccine(id: nil, name: "Hib-2", recommendedAgeInWeeks: 10, sequence: 10, notes: nil),
-            SeedVaccine(id: nil, name: "Rotavirus-2", recommendedAgeInWeeks: 10, sequence: 11, notes: nil),
-            SeedVaccine(id: nil, name: "PCV-2", recommendedAgeInWeeks: 10, sequence: 12, notes: nil),
-            SeedVaccine(id: nil, name: "DTP-3", recommendedAgeInWeeks: 14, sequence: 13, notes: nil),
-            SeedVaccine(id: nil, name: "IPV-3", recommendedAgeInWeeks: 14, sequence: 14, notes: nil),
-            SeedVaccine(id: nil, name: "Hib-3", recommendedAgeInWeeks: 14, sequence: 15, notes: nil),
-            SeedVaccine(id: nil, name: "Rotavirus-3", recommendedAgeInWeeks: 14, sequence: 16, notes: nil),
-            SeedVaccine(id: nil, name: "PCV-3", recommendedAgeInWeeks: 14, sequence: 17, notes: nil),
-            SeedVaccine(id: nil, name: "Influenza-1", recommendedAgeInWeeks: 26, sequence: 18, notes: "6 months"),
-            SeedVaccine(id: nil, name: "MMR-1", recommendedAgeInWeeks: 39, sequence: 19, notes: "9 months"),
-            SeedVaccine(id: nil, name: "HepA-1", recommendedAgeInWeeks: 52, sequence: 20, notes: "12 months"),
-            SeedVaccine(id: nil, name: "MMR-2", recommendedAgeInWeeks: 65, sequence: 21, notes: "15 months"),
-            SeedVaccine(id: nil, name: "Varicella-1", recommendedAgeInWeeks: 65, sequence: 22, notes: "15 months"),
+            // At Birth
+            SeedVaccine(id: nil, name: "BCG", recommendedAgeInWeeks: 0, sequence: 0, notes: "At Birth"),
+            SeedVaccine(id: nil, name: "OPV", recommendedAgeInWeeks: 0, sequence: 1, notes: "At Birth"),
+            SeedVaccine(id: nil, name: "Hepatitis B-1", recommendedAgeInWeeks: 0, sequence: 2, notes: "At Birth"),
 
-            // 16–18 Months (approx 70–78 weeks)
-            SeedVaccine(id: nil, name: "DTwP/DTaP-B1", recommendedAgeInWeeks: m(16), sequence: 23, notes: "16–18 months"),
-            SeedVaccine(id: nil, name: "IPV-B1", recommendedAgeInWeeks: m(16), sequence: 24, notes: "16–18 months"),
-            SeedVaccine(id: nil, name: "Hib-B1", recommendedAgeInWeeks: m(16), sequence: 25, notes: "16–18 months"),
+            // 6 Weeks
+            SeedVaccine(id: nil, name: "DTwP / DTaP-1", recommendedAgeInWeeks: 6, sequence: 3, notes: nil),
+            SeedVaccine(id: nil, name: "IPV-1", recommendedAgeInWeeks: 6, sequence: 4, notes: nil),
+            SeedVaccine(id: nil, name: "Hepatitis B-2", recommendedAgeInWeeks: 6, sequence: 5, notes: nil),
+            SeedVaccine(id: nil, name: "Hib-1", recommendedAgeInWeeks: 6, sequence: 6, notes: nil),
+            SeedVaccine(id: nil, name: "Rotavirus-1", recommendedAgeInWeeks: 6, sequence: 7, notes: nil),
+            SeedVaccine(id: nil, name: "PCV-1", recommendedAgeInWeeks: 6, sequence: 8, notes: nil),
+
+            // 10 Weeks
+            SeedVaccine(id: nil, name: "DTwP / DTaP-2", recommendedAgeInWeeks: 10, sequence: 9, notes: nil),
+            SeedVaccine(id: nil, name: "IPV-2", recommendedAgeInWeeks: 10, sequence: 10, notes: nil),
+            SeedVaccine(id: nil, name: "Hepatitis B-3", recommendedAgeInWeeks: 10, sequence: 11, notes: nil),
+            SeedVaccine(id: nil, name: "Hib-2", recommendedAgeInWeeks: 10, sequence: 12, notes: nil),
+            SeedVaccine(id: nil, name: "Rotavirus-2", recommendedAgeInWeeks: 10, sequence: 13, notes: nil),
+            SeedVaccine(id: nil, name: "PCV-2", recommendedAgeInWeeks: 10, sequence: 14, notes: nil),
+
+            // 14 Weeks
+            SeedVaccine(id: nil, name: "DTwP / DTaP-3", recommendedAgeInWeeks: 14, sequence: 15, notes: nil),
+            SeedVaccine(id: nil, name: "IPV-3", recommendedAgeInWeeks: 14, sequence: 16, notes: nil),
+            SeedVaccine(id: nil, name: "Hepatitis B-4", recommendedAgeInWeeks: 14, sequence: 17, notes: nil),
+            SeedVaccine(id: nil, name: "Hib-3", recommendedAgeInWeeks: 14, sequence: 18, notes: nil),
+            SeedVaccine(id: nil, name: "Rotavirus-3", recommendedAgeInWeeks: 14, sequence: 19, notes: nil),
+            SeedVaccine(id: nil, name: "PCV-3", recommendedAgeInWeeks: 14, sequence: 20, notes: nil),
+
+            // 6–7 Months
+            SeedVaccine(id: nil, name: "Influenza-1", recommendedAgeInWeeks: m(6), sequence: 21, notes: "6 months"),
+            SeedVaccine(id: nil, name: "Influenza-2", recommendedAgeInWeeks: m(7), sequence: 22, notes: "7 months"),
+
+            // 6–9 Months
+            SeedVaccine(id: nil, name: "TCV (Typhoid Conjugate Vaccine)", recommendedAgeInWeeks: m(8), sequence: 23, notes: "6–9 months"),
+
+            // 9–13 Months series
+            SeedVaccine(id: nil, name: "MMR-1", recommendedAgeInWeeks: m(9), sequence: 24, notes: "9 months"),
+            SeedVaccine(id: nil, name: "MCV-1 (Meningococcal Vaccine 1)", recommendedAgeInWeeks: m(9), sequence: 25, notes: nil),
+            SeedVaccine(id: nil, name: "Hepatitis A-1", recommendedAgeInWeeks: m(12), sequence: 26, notes: "12 months"),
+            SeedVaccine(id: nil, name: "MMR-2", recommendedAgeInWeeks: m(12), sequence: 27, notes: nil),
+            SeedVaccine(id: nil, name: "Varicella-1", recommendedAgeInWeeks: m(12), sequence: 28, notes: nil),
+            SeedVaccine(id: nil, name: "JE-1 (Japanese Encephalitis 1)", recommendedAgeInWeeks: m(12), sequence: 29, notes: nil),
+            SeedVaccine(id: nil, name: "Cholera-1", recommendedAgeInWeeks: m(12), sequence: 30, notes: nil),
+            SeedVaccine(id: nil, name: "JE-2 (Japanese Encephalitis 2)", recommendedAgeInWeeks: m(13), sequence: 31, notes: nil),
+            SeedVaccine(id: nil, name: "Cholera-2", recommendedAgeInWeeks: m(13), sequence: 32, notes: nil),
+
+            // 15 Months
+            SeedVaccine(id: nil, name: "PCV Booster (PCV-B)", recommendedAgeInWeeks: m(15), sequence: 33, notes: nil),
+            // MCV-2 is at 12 Months per VaccineDB.json (not 15 months)
+            SeedVaccine(id: nil, name: "MCV-2 (Meningococcal Vaccine 2)", recommendedAgeInWeeks: m(12), sequence: 34, notes: nil),
+
+            // 16–18 Months
+            SeedVaccine(id: nil, name: "DTwP / DTaP-B1", recommendedAgeInWeeks: m(16), sequence: 35, notes: nil),
+            SeedVaccine(id: nil, name: "IPV-B1", recommendedAgeInWeeks: m(16), sequence: 36, notes: nil),
+            SeedVaccine(id: nil, name: "Hib-B1", recommendedAgeInWeeks: m(16), sequence: 37, notes: nil),
 
             // 18–19 Months
-            SeedVaccine(id: nil, name: "HepA-2", recommendedAgeInWeeks: m(18), sequence: 26, notes: "18–19 months"),
-            SeedVaccine(id: nil, name: "Varicella-2", recommendedAgeInWeeks: m(18), sequence: 27, notes: "18–19 months"),
+            SeedVaccine(id: nil, name: "Hepatitis A-2", recommendedAgeInWeeks: m(18), sequence: 38, notes: nil),
+            SeedVaccine(id: nil, name: "Varicella-2", recommendedAgeInWeeks: m(18), sequence: 39, notes: nil),
 
             // 2–3 Years
-            SeedVaccine(id: nil, name: "Influenza (2–3y)", recommendedAgeInWeeks: y(2), sequence: 28, notes: "2–3 years"),
+            SeedVaccine(id: nil, name: "Influenza", recommendedAgeInWeeks: y(2), sequence: 40, notes: "2–3 Years"),
             // 3–4 Years
-            SeedVaccine(id: nil, name: "Influenza (3–4y)", recommendedAgeInWeeks: y(3), sequence: 29, notes: "3–4 years"),
+            SeedVaccine(id: nil, name: "Influenza", recommendedAgeInWeeks: y(3), sequence: 41, notes: "3–4 Years"),
             // 4–5 Years
-            SeedVaccine(id: nil, name: "Influenza (4–5y)", recommendedAgeInWeeks: y(4), sequence: 30, notes: "4–5 years"),
+            SeedVaccine(id: nil, name: "Influenza", recommendedAgeInWeeks: y(4), sequence: 42, notes: "4–5 Years"),
 
-            // 4–6 Years Boosters
-            SeedVaccine(id: nil, name: "DTwP/DTaP-B2", recommendedAgeInWeeks: y(5), sequence: 31, notes: "4–6 years"),
-            SeedVaccine(id: nil, name: "IPV-B2", recommendedAgeInWeeks: y(5), sequence: 32, notes: "4–6 years"),
-            SeedVaccine(id: nil, name: "MMR-3", recommendedAgeInWeeks: y(5), sequence: 33, notes: "4–6 years"),
-            SeedVaccine(id: nil, name: "Tdap", recommendedAgeInWeeks: y(5), sequence: 34, notes: "4–6 years"),
+            // 4–6 Years
+            SeedVaccine(id: nil, name: "DTwP / DTaP-B2", recommendedAgeInWeeks: y(5), sequence: 43, notes: nil),
+            SeedVaccine(id: nil, name: "IPV-B2", recommendedAgeInWeeks: y(5), sequence: 44, notes: nil),
+            SeedVaccine(id: nil, name: "MMR-3", recommendedAgeInWeeks: y(5), sequence: 45, notes: nil),
 
-            // 10–14 Years
-            SeedVaccine(id: nil, name: "HPV-1", recommendedAgeInWeeks: y(10), sequence: 35, notes: "10–14 years"),
-            SeedVaccine(id: nil, name: "HPV-2", recommendedAgeInWeeks: y(10) + 26, sequence: 36, notes: "10–14 years (dose 2)"),
+            SeedVaccine(id: nil, name: "PPSV (Pneumococcal Polysaccharide Vaccine)", recommendedAgeInWeeks: y(2), sequence: 46, notes: "After 2 years"),
 
-            // Optional Vaccines from card
-            SeedVaccine(id: nil, name: "MCV-1", recommendedAgeInWeeks: 39, sequence: 40, notes: "Optional 9 months"),
-            SeedVaccine(id: nil, name: "MCV-2", recommendedAgeInWeeks: 52, sequence: 41, notes: "Optional 12 months"),
-            SeedVaccine(id: nil, name: "JE-1", recommendedAgeInWeeks: 52, sequence: 42, notes: "Optional 12 months"),
-            SeedVaccine(id: nil, name: "Cholera-1", recommendedAgeInWeeks: 52, sequence: 43, notes: "Optional 12 months"),
-            SeedVaccine(id: nil, name: "JE-2", recommendedAgeInWeeks: 56, sequence: 44, notes: "Optional 13 months"),
-            SeedVaccine(id: nil, name: "Cholera-2", recommendedAgeInWeeks: 56, sequence: 45, notes: "Optional 13 months"),
-            SeedVaccine(id: nil, name: "Yellow Fever", recommendedAgeInWeeks: 60, sequence: 46, notes: "After 9 months"),
-            SeedVaccine(id: nil, name: "PPSV", recommendedAgeInWeeks: y(2), sequence: 47, notes: "After 2 years"),
-            SeedVaccine(id: nil, name: "Rabies (any age)", recommendedAgeInWeeks: 0, sequence: 48, notes: "Any age as per exposure")
+            // 9–14 Years
+            SeedVaccine(id: nil, name: "Tdap", recommendedAgeInWeeks: y(9), sequence: 47, notes: nil),
+            SeedVaccine(id: nil, name: "HPV-1", recommendedAgeInWeeks: y(9), sequence: 48, notes: nil),
+            SeedVaccine(id: nil, name: "HPV-2", recommendedAgeInWeeks: y(9) + 26, sequence: 49, notes: nil),
+
+            // After 9 Months / Any Age
+            SeedVaccine(id: nil, name: "Yellow Fever (for travelers/high-risk regions)", recommendedAgeInWeeks: m(10), sequence: 50, notes: nil),
+            SeedVaccine(id: nil, name: "Rabies (post-exposure or pre-exposure in high-risk area)", recommendedAgeInWeeks: 0, sequence: 51, notes: nil)
         ]
     }
 

@@ -14,6 +14,10 @@ enum DateHelpers {
         Formatters.shortDate.string(from: date)
     }
 
+    static func formatDateTime(_ date: Date) -> String {
+        Formatters.dateTime.string(from: date)
+    }
+
     static func relativeDays(to target: Date) -> String {
         let now = Date().startOfDay
         let t = target.startOfDay
@@ -50,6 +54,13 @@ enum Formatters {
         let df = DateFormatter()
         df.dateStyle = .short
         df.timeStyle = .none
+        return df
+    }()
+
+    static let dateTime: DateFormatter = {
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.timeStyle = .short
         return df
     }()
 

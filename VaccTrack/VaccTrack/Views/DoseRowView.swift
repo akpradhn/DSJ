@@ -1,24 +1,42 @@
 import SwiftUI
+import CoreData
 
 struct DoseRowView: View {
-    let dose: Dose
+    @Environment(\.managedObjectContext) private var context
+    @ObservedObject var dose: Dose
 
     var body: some View {
-        NavigationLink {
-            DoseDetailView(dose: dose)
-        } label: {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(dose.vaccine?.name ?? "Vaccine")
-                        .font(.body)
-                    Text(DateHelpers.formatDate(dose.scheduledDate))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+        Group {
+            if dose.managedObjectContext == nil || dose.isDeleted {
+                EmptyView()
+            } else {
+                NavigationLink {
+                    DoseDetailView(dose: dose)
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack(spacing: 6) {
+                                Text(dose.vaccine?.name ?? "Vaccine")
+                                    .font(.body)
+                                if VaccineOptionalHelper.isOptional(name: dose.vaccine?.name) {
+                                    Text("Optional")
+                                        .font(.caption2)
+                                        .padding(.vertical, 2)
+                                        .padding(.horizontal, 6)
+                                        .background(Capsule().fill(Color.blue.opacity(0.15)))
+                                        .foregroundColor(.blue)
+                                }
+                            }
+                            Text(DateHelpers.formatDate(dose.scheduledDate))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        statusBadge
+                    }
+                    .contentShape(Rectangle())
                 }
-                Spacer()
-                statusBadge
             }
-            .contentShape(Rectangle())
         }
     }
 

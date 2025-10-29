@@ -1,0 +1,104 @@
+{
+  "RecommendedVaccinationRecord": {
+    "AtBirth": [
+      "BCG",
+      "OPV",
+      "Hepatitis B-1"
+    ],
+    "6Weeks": [
+      "DTwP / DTaP-1",
+      "IPV-1",
+      "Hepatitis B-2",
+      "Hib-1",
+      "Rotavirus-1",
+      "PCV-1"
+    ],
+    "10Weeks": [
+      "DTwP / DTaP-2",
+      "IPV-2",
+      "Hepatitis B-3",
+      "Hib-2",
+      "Rotavirus-2",
+      "PCV-2"
+    ],
+    "14Weeks": [
+      "DTwP / DTaP-3",
+      "IPV-3",
+      "Hepatitis B-4",
+      "Hib-3",
+      "Rotavirus-3",
+      "PCV-3"
+    ],
+    "6Months": [
+      "Influenza-1"
+    ],
+    "7Months": [
+      "Influenza-2"
+    ],
+    "6to9Months": [
+      "TCV (Typhoid Conjugate Vaccine)"
+    ],
+    "9Months": [
+      "MMR-1"
+    ],
+    "12Months": [
+      "Hepatitis A-1"
+    ],
+    "15Months": [
+      "MMR-2",
+      "Varicella-1",
+      "PCV Booster (PCV-B)"
+    ],
+    "16to18Months": [
+      "DTwP / DTaP-B1",
+      "IPV-B1",
+      "Hib-B1"
+    ],
+    "18to19Months": [
+      "Hepatitis A-2",
+      "Varicella-2"
+    ],
+    "2to3Years": [
+      "Influenza"
+    ],
+    "3to4Years": [
+      "Influenza"
+    ],
+    "4to5Years": [
+      "Influenza"
+    ],
+    "4to6Years": [
+      "DTwP / DTaP-B2",
+      "IPV-B2",
+      "MMR-3"
+    ],
+    "10to14Years": [
+      "Tdap",
+      "HPV-1",
+      "HPV-2"
+    ]
+  },
+  "OptionalVaccinationRecord": {
+    "9Month": [
+      "MCV-1 (Meningococcal Vaccine 1)"  
+    ],
+    "12Month": [
+      "MCV-2 (Meningococcal Vaccine 2)",
+      "JE-1 (Japanese Encephalitis 1)",
+      "Cholera-1"
+    ],
+    "13Month": [
+      "JE-2 (Japanese Encephalitis 2)",
+      "Cholera-2"
+    ],
+    "After 9Month": [
+      "Yellow Fever (for travelers/high-risk regions)"
+    ],
+    "After 2years": [
+      "PPSV (Pneumococcal Polysaccharide Vaccine)"
+    ],
+    "AnyAge": [
+      "Rabies"
+  ]
+}
+}

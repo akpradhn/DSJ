@@ -53,7 +53,6 @@ final class PersistenceController {
         p_id.name = "id"
         p_id.attributeType = .UUIDAttributeType
         p_id.isOptional = false
-        p_id.isIndexed = true
 
         let p_firstName = NSAttributeDescription()
         p_firstName.name = "firstName"
@@ -137,13 +136,11 @@ final class PersistenceController {
         v_id.name = "id"
         v_id.attributeType = .UUIDAttributeType
         v_id.isOptional = false
-        v_id.isIndexed = true
 
         let v_name = NSAttributeDescription()
         v_name.name = "name"
         v_name.attributeType = .stringAttributeType
         v_name.isOptional = false
-        v_name.isIndexed = true
 
         let v_age = NSAttributeDescription()
         v_age.name = "recommendedAgeInWeeks"
@@ -171,7 +168,6 @@ final class PersistenceController {
         d_id.name = "id"
         d_id.attributeType = .UUIDAttributeType
         d_id.isOptional = false
-        d_id.isIndexed = true
 
         let d_scheduled = NSAttributeDescription()
         d_scheduled.name = "scheduledDate"
@@ -237,6 +233,13 @@ final class PersistenceController {
         d_vaccineBrand.attributeType = .stringAttributeType
         d_vaccineBrand.isOptional = true
 
+        // Attachment photo binary blob (stored externally when large)
+        let d_photoData = NSAttributeDescription()
+        d_photoData.name = "photoData"
+        d_photoData.attributeType = .binaryDataAttributeType
+        d_photoData.isOptional = true
+        d_photoData.allowsExternalBinaryDataStorage = true
+
         // Relationships
         let r_dose_patient = NSRelationshipDescription()
         r_dose_patient.name = "patient"
@@ -282,13 +285,33 @@ final class PersistenceController {
 
         dose.properties = [
             d_id, d_scheduled, d_due, d_given, d_batch, d_facility, d_admin, d_notes, d_createdAt,
-            d_weightAtDose, d_heightAtDose, d_headCircumferenceAtDose, d_vaccineBrand,
+            d_weightAtDose, d_heightAtDose, d_headCircumferenceAtDose, d_vaccineBrand, d_photoData,
             r_dose_patient, r_dose_vaccine
         ]
 
         patient.uniquenessConstraints = [["id"]]
         vaccine.uniquenessConstraints = [["id"]]
         dose.uniquenessConstraints = [["id"]]
+
+        // Add indexes using modern API (replaces deprecated isIndexed)
+        let patientIdIndex = NSFetchIndexDescription()
+        patientIdIndex.name = "patient_id_index"
+        patientIdIndex.elements = [NSFetchIndexElementDescription(property: p_id, collationType: .binary)]
+        patient.indexes = [patientIdIndex]
+
+        let vaccineIdIndex = NSFetchIndexDescription()
+        vaccineIdIndex.name = "vaccine_id_index"
+        vaccineIdIndex.elements = [NSFetchIndexElementDescription(property: v_id, collationType: .binary)]
+        
+        let vaccineNameIndex = NSFetchIndexDescription()
+        vaccineNameIndex.name = "vaccine_name_index"
+        vaccineNameIndex.elements = [NSFetchIndexElementDescription(property: v_name, collationType: .binary)]
+        vaccine.indexes = [vaccineIdIndex, vaccineNameIndex]
+
+        let doseIdIndex = NSFetchIndexDescription()
+        doseIdIndex.name = "dose_id_index"
+        doseIdIndex.elements = [NSFetchIndexElementDescription(property: d_id, collationType: .binary)]
+        dose.indexes = [doseIdIndex]
 
         model.entities = [patient, vaccine, dose]
         return model

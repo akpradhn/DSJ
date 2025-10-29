@@ -38,7 +38,12 @@ struct HomeView: View {
             NavigationStack { SettingsView().navigationTitle("Settings") }
                 .tabItem { Label("Settings", systemImage: "gearshape.fill") }
         }
-        .sheet(isPresented: $showingNewPatient) { NavigationStack { PatientFormView(onSaved: { _ in vm.fetch(); showingNewPatient = false }, onCancel: { showingNewPatient = false }).environment(\.managedObjectContext, context) } }
+        .sheet(isPresented: $showingNewPatient) {
+            NavigationStack {
+                PatientFormView(context: context, onSaved: { _ in vm.fetch(); showingNewPatient = false }, onCancel: { showingNewPatient = false })
+                    .environment(\.managedObjectContext, context)
+            }
+        }
         .onAppear { vm.fetch() }
     }
 

@@ -3,8 +3,34 @@ import CoreData
 
 enum ExportImportService {
     static func exportAllPatientsJSON(context: NSManagedObjectContext) throws -> Data {
-        let req: NSFetchRequest<Patient> = Patient.fetchRequest()
-        let patients = try context.fetch(req)
+        var patients: [Patient] = []
+        try context.performAndWait {
+            // Ensure all pending changes are saved before export
+            if context.hasChanges {
+                try context.save()
+            }
+            
+            let req: NSFetchRequest<Patient> = Patient.fetchRequest()
+            // Prefetch all related data to ensure complete export
+            req.relationshipKeyPathsForPrefetching = ["doses", "doses.vaccine"]
+            req.returnsObjectsAsFaults = false // Load all data, not faults
+            req.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: true)]
+            patients = try context.fetch(req)
+            
+            // Force materialization of all relationships and attributes
+            for patient in patients {
+                if let dosesSet = patient.doses {
+                    for dose in dosesSet {
+                        _ = dose.vaccine
+                        _ = dose.id
+                        _ = dose.scheduledDate
+                        _ = dose.givenOn
+                        _ = dose.value(forKey: "weightAtDose")
+                        _ = dose.value(forKey: "photoData")
+                    }
+                }
+            }
+        }
         let payload = patients.map { PatientDTO(from: $0) }
         let data = try JSONEncoder.prettyEncoder.encode(payload)
         return data
@@ -31,11 +57,23 @@ enum ExportImportService {
 
     private static func merge(patients dtos: [PatientDTO], context: NSManagedObjectContext) throws {
         try context.performAndWait {
+            // Collect all dose IDs from backup
+            let allDoseIds = dtos.flatMap { $0.doses.map { $0.id } }
+            
+            // Fetch ALL existing doses globally by ID (not just per patient)
+            let existingDosesRequest: NSFetchRequest<Dose> = Dose.fetchRequest()
+            existingDosesRequest.predicate = NSPredicate(format: "id IN %@", allDoseIds)
+            existingDosesRequest.returnsObjectsAsFaults = false
+            let existingDoses = (try? context.fetch(existingDosesRequest)) ?? []
+            var existingDoseById: [UUID: Dose] = Dictionary(uniqueKeysWithValues: existingDoses.map { ($0.id, $0) })
+            
             for dto in dtos {
                 let patient = fetchPatient(id: dto.id, context: context) ?? Patient(context: context)
                 patient.id = dto.id
                 patient.createdAt = dto.createdAt
-                if !dto.firstName.trimmingCharacters(in: .whitespaces).isEmpty { patient.firstName = dto.firstName }
+                if !dto.firstName.trimmingCharacters(in: .whitespaces).isEmpty { 
+                    patient.firstName = dto.firstName 
+                }
                 patient.lastName = dto.lastName
                 patient.motherName = dto.motherName
                 patient.fatherName = dto.fatherName
@@ -49,20 +87,51 @@ enum ExportImportService {
                 patient.contactNumber = dto.contactNumber
                 patient.notes = dto.notes
 
-                let existingDoseById: [UUID: Dose] = Dictionary(uniqueKeysWithValues: (patient.doses ?? []).map { ($0.id, $0) })
+                // Process all doses for this patient from backup
+                let dtoDoseIds: Set<UUID> = Set(dto.doses.map { $0.id })
                 for d in dto.doses {
-                    let dose = existingDoseById[d.id] ?? Dose(context: context)
+                    // Find existing dose or create new one
+                    let dose = existingDoseById[d.id] ?? {
+                        let newDose = Dose(context: context)
+                        newDose.id = d.id
+                        existingDoseById[d.id] = newDose
+                        return newDose
+                    }()
+                    
+                    // IMPORTANT: Update ALL fields from backup, especially givenOn
                     dose.id = d.id
                     dose.scheduledDate = d.scheduledDate
                     dose.dueDate = d.dueDate
-                    dose.givenOn = d.givenOn
+                    dose.givenOn = d.givenOn // CRITICAL: This must be restored exactly
                     dose.batchNumber = d.batchNumber
                     dose.facility = d.facility
                     dose.administeredBy = d.administeredBy
                     dose.notes = d.notes
                     dose.createdAt = d.createdAt
+                    
+                    // Restore physical measurements
+                    dose.setValue(d.weightAtDose ?? 0.0, forKey: "weightAtDose")
+                    dose.setValue(d.heightAtDose ?? 0.0, forKey: "heightAtDose")
+                    dose.setValue(d.headCircumferenceAtDose ?? 0.0, forKey: "headCircumferenceAtDose")
+                    
+                    // Restore vaccine brand
+                    if let brand = d.vaccineBrand {
+                        dose.setValue(brand, forKey: "vaccineBrand")
+                    } else {
+                        dose.setValue(nil, forKey: "vaccineBrand")
+                    }
+                    
+                    // Restore photo data
+                    if let photo = d.photoData {
+                        dose.setValue(photo, forKey: "photoData")
+                    } else {
+                        dose.setValue(nil, forKey: "photoData")
+                    }
+                    
+                    // Ensure patient relationship is set
                     dose.patient = patient
 
+                    // Restore vaccine relationship
                     if let vaccineId = d.vaccine?.id {
                         let vaccine = fetchVaccine(id: vaccineId, context: context) ?? Vaccine(context: context)
                         vaccine.id = vaccineId
@@ -79,10 +148,31 @@ enum ExportImportService {
                         vaccine.sequence = Int16(d.vaccine?.sequence ?? Int(vaccine.sequence))
                         vaccine.notes = d.vaccine?.notes
                         dose.vaccine = vaccine
+                    } else {
+                        dose.vaccine = nil
+                    }
+                }
+
+                // Remove any doses for this patient that are NOT in the backup (cleanup orphaned/duplicate doses)
+                let fetchExistingForPatient: NSFetchRequest<Dose> = Dose.fetchRequest()
+                fetchExistingForPatient.predicate = NSPredicate(format: "patient == %@", patient)
+                if let patientExistingDoses = try? context.fetch(fetchExistingForPatient) {
+                    for existing in patientExistingDoses where !dtoDoseIds.contains(existing.id) {
+                        context.delete(existing)
                     }
                 }
             }
+            
+            // Save all changes
             try context.save()
+            
+            // Critical: Refresh all objects to ensure UI reflects changes, especially givenOn status
+            context.refreshAllObjects()
+            
+            // Force save again after refresh to persist any changes
+            if context.hasChanges {
+                try context.save()
+            }
         }
     }
 
@@ -166,6 +256,11 @@ struct DoseDTO: Codable, Equatable {
     var notes: String?
     var createdAt: Date
     var vaccine: VaccineRef?
+    var weightAtDose: Float?
+    var heightAtDose: Float?
+    var headCircumferenceAtDose: Float?
+    var vaccineBrand: String?
+    var photoData: Data?
 
     init(from dose: Dose) {
         id = dose.id
@@ -177,6 +272,11 @@ struct DoseDTO: Codable, Equatable {
         administeredBy = dose.administeredBy
         notes = dose.notes
         createdAt = dose.createdAt
+        weightAtDose = dose.value(forKey: "weightAtDose") as? Float
+        heightAtDose = dose.value(forKey: "heightAtDose") as? Float
+        headCircumferenceAtDose = dose.value(forKey: "headCircumferenceAtDose") as? Float
+        vaccineBrand = dose.value(forKey: "vaccineBrand") as? String
+        photoData = dose.value(forKey: "photoData") as? Data
         if let v = dose.vaccine {
             vaccine = VaccineRef(id: v.id, name: v.name, recommendedAgeInWeeks: Int(v.recommendedAgeInWeeks), sequence: Int(v.sequence), notes: v.notes)
         } else {

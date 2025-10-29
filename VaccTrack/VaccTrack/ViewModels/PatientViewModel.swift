@@ -45,10 +45,35 @@ final class PatientViewModel: ObservableObject {
 
     @discardableResult
     func saveAndGenerateDosesIfNeeded(seedVaccines vaccines: [Vaccine]? = nil) throws -> Patient {
+        // Duplicate validation: same first+last name (case/space insensitive) on same calendar day
+        let trimmedFirst = firstName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedLast = lastName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let cal = Calendar.current
+        let dayStart = cal.startOfDay(for: dob)
+        let dayEnd = cal.date(byAdding: .day, value: 1, to: dayStart)!
+
+        let req: NSFetchRequest<Patient> = Patient.fetchRequest()
+        var predicates: [NSPredicate] = []
+        predicates.append(NSPredicate(format: "firstName =[c] %@", trimmedFirst))
+        if trimmedLast.isEmpty {
+            predicates.append(NSPredicate(format: "lastName == nil OR lastName == ''"))
+        } else {
+            predicates.append(NSPredicate(format: "lastName =[c] %@", trimmedLast))
+        }
+        predicates.append(NSPredicate(format: "dob >= %@ AND dob < %@", dayStart as NSDate, dayEnd as NSDate))
+        if let existing = patient { // exclude self when editing
+            predicates.append(NSPredicate(format: "self != %@", existing))
+        }
+        req.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        let dupCount = (try? context.count(for: req)) ?? 0
+        if dupCount > 0 {
+            throw NSError(domain: "PatientValidation", code: 1001, userInfo: [NSLocalizedDescriptionKey: "A patient with the same name and date of birth already exists."])
+        }
+
         let p: Patient = patient ?? Patient(context: context)
         if patient == nil { p.id = UUID(); p.createdAt = Date() }
-        p.firstName = firstName.trimmingCharacters(in: .whitespacesAndNewlines)
-        p.lastName = lastName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : lastName
+        p.firstName = trimmedFirst
+        p.lastName = trimmedLast.isEmpty ? nil : trimmedLast
         p.motherName = motherName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : motherName
         p.fatherName = fatherName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : fatherName
         p.gender = gender.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : gender

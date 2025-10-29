@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 import Combine
+import UIKit
 
 final class DoseViewModel: ObservableObject {
     @Published var scheduledDate: Date = Date()
@@ -15,6 +16,7 @@ final class DoseViewModel: ObservableObject {
     @Published var heightAtDose: Float = 0.0
     @Published var headCircumferenceAtDose: Float = 0.0
     @Published var vaccineBrand: String = ""
+    @Published var photoImage: UIImage? = nil
 
     private let context: NSManagedObjectContext
     private(set) var dose: Dose
@@ -38,6 +40,7 @@ final class DoseViewModel: ObservableObject {
         heightAtDose = (dose.value(forKey: "heightAtDose") as? Float) ?? 0.0
         headCircumferenceAtDose = (dose.value(forKey: "headCircumferenceAtDose") as? Float) ?? 0.0
         vaccineBrand = (dose.value(forKey: "vaccineBrand") as? String) ?? ""
+        if let data = dose.value(forKey: "photoData") as? Data { photoImage = UIImage(data: data) }
     }
 
     var status: DoseStatus { dose.status }
@@ -66,6 +69,7 @@ final class DoseViewModel: ObservableObject {
         dose.heightAtDose = heightAtDose
         dose.headCircumferenceAtDose = headCircumferenceAtDose
         dose.vaccineBrand = vaccineBrand.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : vaccineBrand
+        if let img = photoImage, let data = img.jpegData(compressionQuality: 0.8) { dose.photoData = data } else { dose.photoData = nil }
         try context.save()
     }
 
@@ -76,7 +80,30 @@ final class DoseViewModel: ObservableObject {
         do { try context.save() } catch { context.rollback() }
     }
 
-    func delete() throws { context.delete(dose); try context.save() }
+    func delete() throws {
+        // Delete all visually-identical doses in one go
+        if let patient = dose.patient {
+            let cal = Calendar.current
+            let day = cal.startOfDay(for: dose.scheduledDate)
+            let fetch: NSFetchRequest<Dose> = Dose.fetchRequest()
+            if let vaccine = dose.vaccine {
+                fetch.predicate = NSPredicate(format: "patient == %@ AND vaccine == %@", patient, vaccine)
+            } else {
+                fetch.predicate = NSPredicate(format: "patient == %@ AND vaccine == nil", patient)
+            }
+            if let matches = try? context.fetch(fetch) {
+                for d in matches where cal.isDate(cal.startOfDay(for: d.scheduledDate), inSameDayAs: day) {
+                    context.delete(d)
+                }
+            } else {
+                context.delete(dose)
+            }
+        } else {
+            context.delete(dose)
+        }
+        try context.save()
+        context.refreshAllObjects()
+    }
 }
 
 

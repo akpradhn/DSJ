@@ -8,7 +8,7 @@ enum PDFGenerator {
 
         let data = renderer.pdfData { ctx in
             ctx.beginPage()
-            let title = "Vaccination Record"
+            let title = "Immunization Records"
             let attrs: [NSAttributedString.Key: Any] = [
                 .font: UIFont.boldSystemFont(ofSize: 20)
             ]
@@ -28,7 +28,9 @@ enum PDFGenerator {
             y += 24
 
             for dose in patient.sortedDoses {
-                let line = "\(DateHelpers.shortDate(dose.scheduledDate))  \(dose.vaccine?.name ?? "-")  [\(statusText(dose.status))]"
+                let vName = dose.vaccine?.name ?? "-"
+                let optTag = VaccineOptionalHelper.isOptional(name: vName) ? " (Optional)" : ""
+                let line = "\(DateHelpers.shortDate(dose.scheduledDate))  \(vName)\(optTag)  [\(statusText(dose.status))]"
                 line.draw(in: CGRect(x: 36, y: y, width: pageRect.width - 72, height: 16), withAttributes: [.font: UIFont.systemFont(ofSize: 12)])
                 y += 16
                 if y > pageRect.height - 50 {
@@ -51,15 +53,22 @@ enum PDFGenerator {
             ctx.beginPage()
 
             // Header
-            let title = "Vaccination Sheet"
+            let title = "Immunization Records"
             title.draw(at: CGPoint(x: left, y: 24), withAttributes: [.font: UIFont.boldSystemFont(ofSize: 22)])
             let subtitle = "\(patient.displayName)  |  DOB: \(DateHelpers.shortDate(patient.dob))"
-            subtitle.draw(at: CGPoint(x: left, y: 50), withAttributes: [.font: UIFont.systemFont(ofSize: 12)])
+            let para = NSMutableParagraphStyle(); para.lineBreakMode = .byWordWrapping
+            let subAttrs: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 12),
+                .paragraphStyle: para
+            ]
+            // Wrap subtitle and give it ample height
+            let subtitleRect = CGRect(x: left, y: 50, width: page.width - 2*left, height: 40)
+            subtitle.draw(in: subtitleRect, withAttributes: subAttrs)
 
             // Table Columns: Age | Vaccines | Due on | Given on | Batch | Weight | Length | Head Circ.
-            let startY: CGFloat = 80
+            // Push table down to avoid overlapping with header/subtitle
+            let startY: CGFloat = 110
             let rowHeight: CGFloat = 24
-            let colXs: [CGFloat] = [left, left+70, left+240, left+320, left+400, left+460, left+520]
             // Draw header row
             drawRow(y: startY-rowHeight, texts: ["Age","Vaccine","Due on","Given on","Batch","Wt","Len","Head"], colXs: [left, left+70, left+240, left+320, left+400, left+460, left+520, right], bold: true)
 
@@ -68,14 +77,20 @@ enum PDFGenerator {
             let doses = patient.sortedDoses
             for dose in doses {
                 let ageWeeks = Int(dose.vaccine?.recommendedAgeInWeeks ?? 0)
-                let ageLabel = ageWeeks == 0 ? "Birth" : (ageWeeks % 4 == 0 ? "\(ageWeeks/4) Week" : "\(ageWeeks) wk")
+                let ageLabel: String
+                if ageWeeks == 0 { ageLabel = "Birth" }
+                else if ageWeeks == 52 { ageLabel = "12 Months" }
+                else if ageWeeks % 52 == 0 { ageLabel = "\(ageWeeks/52) Years" }
+                else if ageWeeks % 4 == 0 { ageLabel = "\(ageWeeks/4) Weeks" } else { ageLabel = "Week \(ageWeeks)" }
                 let due = DateHelpers.shortDate(dose.scheduledDate)
                 let given = dose.givenOn.map { DateHelpers.shortDate($0) } ?? ""
                 let batch = dose.batchNumber ?? ""
                 let wt = dose.weightAtDose > 0 ? String(format: "%.0f", dose.weightAtDose) : ""
-                let len = dose.heightAtDose > 0 ? String(format: "%.0f", dose.heightAtDose) : ""
+                let ht = dose.heightAtDose > 0 ? String(format: "%.0f", dose.heightAtDose) : ""
                 let head = dose.headCircumferenceAtDose > 0 ? String(format: "%.0f", dose.headCircumferenceAtDose) : ""
-                drawRow(y: y, texts: [ageLabel, dose.vaccine?.name ?? "", due, given, batch, wt, len, head], colXs: [left, left+70, left+240, left+320, left+400, left+460, left+520, right], bold: false)
+                let vName = dose.vaccine?.name ?? ""
+                let optTag = VaccineOptionalHelper.isOptional(name: vName) ? " (Optional)" : ""
+                drawRow(y: y, texts: [ageLabel, vName + optTag, due, given, batch, wt, ht, head], colXs: [left, left+70, left+240, left+320, left+400, left+460, left+520, right], bold: false)
                 y += rowHeight
                 if y > page.height - 40 { ctx.beginPage(); y = 24 }
             }

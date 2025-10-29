@@ -37,11 +37,14 @@ struct PatientFormView: View {
 
     let onSaved: (Patient) -> Void
     let onCancel: () -> Void
+    @State private var showErrorAlert = false
+    @State private var errorMessage = ""
 
-    init(patient: Patient? = nil,
+    init(context: NSManagedObjectContext = PersistenceController.shared.viewContext,
+         patient: Patient? = nil,
          onSaved: @escaping (Patient) -> Void,
          onCancel: @escaping () -> Void) {
-        _vm = StateObject(wrappedValue: PatientViewModel(context: PersistenceController.shared.viewContext, patient: patient))
+        _vm = StateObject(wrappedValue: PatientViewModel(context: context, patient: patient))
         self.onSaved = onSaved
         self.onCancel = onCancel
     }
@@ -178,7 +181,8 @@ struct PatientFormView: View {
                         let saved = try vm.saveAndGenerateDosesIfNeeded()
                         onSaved(saved)
                     } catch {
-                        // handle error
+                        errorMessage = (error as NSError).localizedDescription
+                        showErrorAlert = true
                     }
                 }
                 .disabled(!vm.isValid)
@@ -187,6 +191,11 @@ struct PatientFormView: View {
         .onChange(of: weightUnit) { _, _ in syncInputsFromModel() }
         .onChange(of: lengthUnit) { _, _ in syncInputsFromModel() }
         .onChange(of: headUnit) { _, _ in syncInputsFromModel() }
+        .alert("Error", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(errorMessage)
+        }
     }
 
     private func initFields() {

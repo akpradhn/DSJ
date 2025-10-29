@@ -28,6 +28,7 @@ extension Dose {
     @NSManaged public var heightAtDose: Float
     @NSManaged public var headCircumferenceAtDose: Float
     @NSManaged public var vaccineBrand: String?
+    @NSManaged public var photoData: Data?
 
     @NSManaged public var patient: Patient?
     @NSManaged public var vaccine: Vaccine?

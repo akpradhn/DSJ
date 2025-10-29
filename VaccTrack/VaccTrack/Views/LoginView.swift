@@ -28,7 +28,7 @@ struct LoginView: View {
         VStack(spacing: 0) {
             // Decorative header
             ZStack(alignment: .bottom) {
-                LinearGradient(colors: [Color("LoginTop") ?? .blue.opacity(0.25), Color("LoginTop2") ?? .blue.opacity(0.15)], startPoint: .top, endPoint: .bottom)
+                LinearGradient(colors: [Color("LoginTop").opacity(0.25), Color("LoginTop2").opacity(0.15)], startPoint: .top, endPoint: .bottom)
                     .frame(height: 180)
                     .clipShape(RoundedCorner(radius: 32, corners: [.bottomLeft, .bottomRight]))
                 VStack(spacing: 4) {
