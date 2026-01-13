@@ -15,8 +15,8 @@ To design, code, and document 100 mini-projects or concepts around AI Agents usi
 | Day | Topic | Highlights | Status |
 |-----|--------|-------------|--------|
 | 1 | Intro to Agents | Building a minimal agent loop | ✅ |
-| 2 | Adding Memory | Using LangChain's memory | ⏳ |
-| 3 | Tools and Actions | Integrating external APIs | ⏳ |
+| 2 | Adding Memory | Using LangChain's memory | ✅ |
+| 3 | Generative AI Agents | Function calling, SQL agents, LangGraph | ✅ |
 | ... | ... | ... | ... |
 
 ---
