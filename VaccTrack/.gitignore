@@ -1,0 +1,5 @@
+# Open Android Studio on `vacciTrackandroid/` only. If the parent folder was opened by mistake, ignore IDE noise here.
+.gradle/
+.kotlin/
+.idea/
+.DS_Store

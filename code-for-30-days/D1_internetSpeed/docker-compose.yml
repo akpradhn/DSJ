@@ -1,0 +1,16 @@
+version: '2.0'
+services:
+  web:
+    container_name: pyspeedtest_v1
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PYTHON_BASE_IMAGE: python:3.6.10-slim-buster
+    restart: always
+    environment:
+      - TZ='Asia/Kolkata'
+    user: 'root'
+    ports:
+      - "8000:8000"
+    

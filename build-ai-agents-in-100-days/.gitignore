@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Data
+*.csv
+*.json
+*.txt
+data/
+logs/
+outputs/
+cache/
+
+# Vector Stores
+chroma_db/
+*.db
+*.sqlite
+
+# API Keys (redundant but safe)
+*_key.txt
+*_secret.txt
+.secrets
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Model files (large)
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.model
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Coverage
+.coverage
+htmlcov/
+
+# pytest
+.pytest_cache/
